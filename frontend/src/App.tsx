@@ -1,19 +1,153 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { Layout } from "./components/Layout";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { LoginPage } from "./pages/LoginPage";
+import { Dashboard } from "./pages/Dashboard";
+import { PatientsPage } from "./pages/PatientsPage";
+import { PatientDetailPage } from "./pages/PatientDetailPage";
+import { AppointmentsPage } from "./pages/AppointmentsPage";
+import { SessionsPage } from "./pages/SessionsPage";
+import { ReportTemplatesPage } from "./pages/ReportTemplatesPage";
+import { ConsentTemplatesPage } from "./pages/ConsentTemplatesPage";
+import { UsersPage } from "./pages/UsersPage";
+import { ClinicSettingsPage } from "./pages/ClinicSettingsPage";
+import { FamilyPortalPage } from "./pages/FamilyPortalPage";
 import { BillingDashboard } from "./pages/BillingDashboard";
 import { PaymentsPage } from "./pages/PaymentsPage";
 import { FeesPage } from "./pages/FeesPage";
 import { SessionBillingPage } from "./pages/SessionBillingPage";
+import type { Role } from "./types/api";
+
+const STAFF: Role[] = ["CLINIC_ADMIN", "THERAPIST", "RECEPTION"];
+const CLINICAL: Role[] = ["CLINIC_ADMIN", "THERAPIST"];
+const ADMIN: Role[] = ["CLINIC_ADMIN"];
 
 export function App() {
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<BillingDashboard />} />
-        <Route path="/payments" element={<PaymentsPage />} />
-        <Route path="/fees" element={<FeesPage />} />
-        <Route path="/session-billing" element={<SessionBillingPage />} />
-      </Routes>
-    </Layout>
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route
+        path="/*"
+        element={
+          <Layout>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute roles={STAFF}>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/patients"
+                element={
+                  <ProtectedRoute roles={STAFF}>
+                    <PatientsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/patients/:patientId"
+                element={
+                  <ProtectedRoute roles={STAFF}>
+                    <PatientDetailPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/appointments"
+                element={
+                  <ProtectedRoute roles={STAFF}>
+                    <AppointmentsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/sessions"
+                element={
+                  <ProtectedRoute roles={CLINICAL}>
+                    <SessionsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/report-templates"
+                element={
+                  <ProtectedRoute roles={CLINICAL}>
+                    <ReportTemplatesPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/consent-templates"
+                element={
+                  <ProtectedRoute roles={CLINICAL}>
+                    <ConsentTemplatesPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/users"
+                element={
+                  <ProtectedRoute roles={ADMIN}>
+                    <UsersPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/clinic"
+                element={
+                  <ProtectedRoute roles={ADMIN}>
+                    <ClinicSettingsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/billing"
+                element={
+                  <ProtectedRoute roles={STAFF}>
+                    <BillingDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/payments"
+                element={
+                  <ProtectedRoute roles={STAFF}>
+                    <PaymentsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/fees"
+                element={
+                  <ProtectedRoute roles={STAFF}>
+                    <FeesPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/session-billing"
+                element={
+                  <ProtectedRoute roles={STAFF}>
+                    <SessionBillingPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/portal"
+                element={
+                  <ProtectedRoute roles={["FAMILY"]}>
+                    <FamilyPortalPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </Layout>
+        }
+      />
+    </Routes>
   );
 }

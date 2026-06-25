@@ -1,5 +1,7 @@
-com\logopeda\billing\service\PaymentServiceTest.class
 com\logopeda\billing\BillingApplicationTests.class
-com\logopeda\billing\service\FeeServiceTest.class
 com\logopeda\billing\service\BillingSummaryServiceTest.class
 com\logopeda\billing\service\SessionBillingServiceTest.class
+com\logopeda\V1SecurityIntegrationTest.class
+com\logopeda\billing\service\PaymentServiceTest.class
+com\logopeda\billing\service\FeeServiceTest.class
+com\logopeda\V1SecurityIntegrationTest$LoginBody.class

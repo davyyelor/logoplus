@@ -359,3 +359,229 @@ tbody tr:last-child td {
   font-variant-numeric: tabular-nums;
   font-weight: 600;
 }
+
+/* ---- V1 additions ---- */
+
+.sidebar__footer {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar__user {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebar__role {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: capitalize;
+}
+
+.button {
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  background: var(--neutral-bg);
+  color: var(--text);
+}
+
+.button:hover {
+  filter: brightness(0.97);
+}
+
+.button--primary {
+  background: var(--primary);
+  color: #fff;
+  width: 100%;
+}
+
+.button--primary:hover {
+  background: var(--primary-dark);
+}
+
+.button--ghost {
+  background: transparent;
+  border-color: var(--border);
+}
+
+.button:disabled,
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Login */
+.login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(160deg, #eef2fb 0%, #f4f6fb 100%);
+}
+
+.login__card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  width: min(380px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+}
+
+.login__brand {
+  margin: 0;
+  font-size: 1.6rem;
+  text-align: center;
+  color: var(--primary);
+}
+
+.login__subtitle {
+  margin: 0 0 8px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.login__hint {
+  margin: 4px 0 0;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.field__label {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.field__input {
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: #fff;
+}
+
+.field--check {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+.field--check input {
+  min-width: auto;
+  width: auto;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.tabs__item {
+  border: none;
+  background: transparent;
+  padding: 10px 14px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.tabs__item:hover {
+  color: var(--text);
+}
+
+.tabs__item--active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.tab-panel {
+  margin-top: 4px;
+}
+
+/* Patient summary detail grid */
+.detail-grid {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 10px 16px;
+  margin: 0;
+}
+
+.detail-grid dt {
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.detail-grid dd {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Simple lists (family portal) */
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.list li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.list li:last-child {
+  border-bottom: none;
+}
+
+.portal .card h2 {
+  margin-top: 0;
+  font-size: 1.05rem;
+}
+
+fieldset.field {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+fieldset.field legend {
+  font-size: 0.8rem;
+  color: var(--muted);
+  padding: 0 4px;
+}

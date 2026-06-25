@@ -5,7 +5,7 @@ spring:
   application:
     name: billing-backend
   datasource:
-    url: jdbc:h2:mem:billingdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:mem:billingdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL
     driver-class-name: org.h2.Driver
     username: sa
     password: ""
@@ -16,10 +16,37 @@ spring:
     properties:
       hibernate:
         format_sql: false
+  flyway:
+    enabled: false
   h2:
     console:
       enabled: true
       path: /h2-console
+  servlet:
+    multipart:
+      max-file-size: 25MB
+      max-request-size: 25MB
+
+# Application-wide configuration for the V1 modules.
+app:
+  security:
+    jwt:
+      # Local-only development secret. Override via APP_SECURITY_JWT_SECRET in
+      # any shared/production environment. Must be at least 32 bytes.
+      secret: ${APP_SECURITY_JWT_SECRET:local-dev-secret-change-me-please-32bytes-min!!}
+      expiration-minutes: 480
+  storage:
+    # Local filesystem storage root for uploaded documents. Swappable for S3
+    # later via the StoragePort abstraction.
+    local-root: ${APP_STORAGE_LOCAL_ROOT:./data/uploads}
+    max-file-size-bytes: 26214400
+    allowed-content-types: >-
+      application/pdf,image/png,image/jpeg,image/gif,image/webp,
+      audio/mpeg,audio/wav,audio/ogg,video/mp4,video/webm,
+      application/msword,
+      application/vnd.openxmlformats-officedocument.wordprocessingml.document,
+      text/plain
+  seed-demo-data: true
 
 # Billing module configuration.
 # Future third-party integrations are disabled in this MVP. They are wired as
