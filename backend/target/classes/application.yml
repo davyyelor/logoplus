@@ -1,0 +1,41 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: billing-backend
+  datasource:
+    url: jdbc:h2:mem:billingdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+# Billing module configuration.
+# Future third-party integrations are disabled in this MVP. They are wired as
+# placeholders only and never call real external APIs while disabled.
+billing:
+  default-clinic-id: clinic-default
+  default-currency: EUR
+  seed-sample-data: true
+  integrations:
+    holded:
+      enabled: false
+    quipu:
+      enabled: false
+    stripe:
+      enabled: false
+    ticketbai:
+      enabled: false
+    verifactu:
+      enabled: false

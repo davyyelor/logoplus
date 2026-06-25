@@ -1,0 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+CREATE SCHEMA IF NOT EXISTS app;
+
+ALTER DATABASE clinic_saas SET timezone TO 'Europe/Madrid';

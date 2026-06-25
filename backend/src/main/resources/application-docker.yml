@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:postgres}:${DB_PORT:5432}/${DB_NAME:clinic_saas}
+    username: ${DB_USERNAME:clinic_user}
+    password: ${DB_PASSWORD:clinic_password}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        default_schema: app
+        format_sql: true
+        jdbc:
+          time_zone: Europe/Madrid
+
+  flyway:
+    enabled: true
+    schemas: app
+    default-schema: app
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
