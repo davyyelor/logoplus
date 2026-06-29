@@ -21,7 +21,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, String
               AND (:patientId IS NULL OR a.patientId = :patientId)
               AND (:therapistId IS NULL OR a.therapistId = :therapistId)
               AND (:from IS NULL OR a.startDateTime >= :from)
-              AND (:to IS NULL OR a.startDateTime <= :to)
+              AND (:to IS NULL OR a.startDateTime < :to)
               AND (:status IS NULL OR a.status = :status)
             ORDER BY a.startDateTime ASC
             """)
