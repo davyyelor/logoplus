@@ -54,6 +54,7 @@ com\logopeda\document\dto\DocumentResponse.class
 com\logopeda\document\storage\S3StorageService.class
 com\logopeda\patient\repository\PatientRepository.class
 com\logopeda\billing\model\Fee.class
+com\logopeda\appointment\repository\AppointmentSpecifications.class
 com\logopeda\billing\integration\IntegrationModels.class
 com\logopeda\questionnaire\dto\AssignQuestionnaireRequest.class
 com\logopeda\billing\model\Payment.class
@@ -327,6 +328,7 @@ com\logopeda\paymentgateway\dto\WebhookResult.class
 com\logopeda\user\repository\UserRepository.class
 com\logopeda\audit\service\AuditService.class
 com\logopeda\signature\dto\SignatureResponse.class
+com\logopeda\patient\repository\PatientSpecifications.class
 com\logopeda\signature\repository\SignatureRecordRepository.class
 com\logopeda\homework\dto\UpdateHomeworkStatusRequest.class
 com\logopeda\reminder\service\LoggingReminderDeliveryPort.class

@@ -5,12 +5,15 @@ import com.logopeda.appointment.enums.AppointmentStatus;
 import com.logopeda.appointment.enums.LocationType;
 import com.logopeda.appointment.model.Appointment;
 import com.logopeda.appointment.repository.AppointmentRepository;
+import com.logopeda.appointment.repository.AppointmentSpecifications;
 import com.logopeda.billing.exception.BusinessValidationException;
 import com.logopeda.billing.exception.ResourceNotFoundException;
 import com.logopeda.patient.service.PatientAccessGuard;
 import com.logopeda.shared.security.TenantContext;
 import java.time.Instant;
 import java.util.List;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,8 +39,15 @@ public class AppointmentService {
     @Transactional(readOnly = true)
     public List<Appointment> search(String clinicId, String patientId, String therapistId,
                                     Instant from, Instant to, AppointmentStatus status) {
-        return appointmentRepository.search(clinicId,
-                blankToNull(patientId), blankToNull(therapistId), from, to, status);
+        Specification<Appointment> spec = Specification
+                .where(AppointmentSpecifications.belongsToClinic(clinicId))
+                .and(AppointmentSpecifications.hasPatient(blankToNull(patientId)))
+                .and(AppointmentSpecifications.hasTherapist(blankToNull(therapistId)))
+                .and(AppointmentSpecifications.startsAtOrAfter(from))
+                .and(AppointmentSpecifications.startsBefore(to))
+                .and(AppointmentSpecifications.hasStatus(status));
+
+        return appointmentRepository.findAll(spec, Sort.by(Sort.Direction.ASC, "startDateTime"));
     }
 
     @Transactional(readOnly = true)

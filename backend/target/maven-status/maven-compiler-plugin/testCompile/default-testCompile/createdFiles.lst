@@ -1,4 +1,6 @@
+com\logopeda\appointment\repository\AppointmentSearchRepositoryTest.class
 com\logopeda\V2Phase3SecurityIntegrationTest$PatientBody.class
+com\logopeda\patient\repository\PatientSearchRepositoryTest.class
 com\logopeda\billing\service\BillingSummaryServiceTest.class
 com\logopeda\V2Phase2SecurityIntegrationTest.class
 com\logopeda\V2Phase4SecurityIntegrationTest$CheckoutBody.class

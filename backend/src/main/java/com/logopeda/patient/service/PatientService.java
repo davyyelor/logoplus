@@ -7,8 +7,11 @@ import com.logopeda.patient.dto.PatientRequest;
 import com.logopeda.patient.enums.PatientStatus;
 import com.logopeda.patient.model.Patient;
 import com.logopeda.patient.repository.PatientRepository;
+import com.logopeda.patient.repository.PatientSpecifications;
 import com.logopeda.shared.security.TenantContext;
 import java.util.List;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -33,7 +36,14 @@ public class PatientService {
 
     @Transactional(readOnly = true)
     public List<Patient> search(String clinicId, PatientStatus status, String therapistId, String search) {
-        return patientRepository.search(clinicId, status, emptyToNull(therapistId), emptyToNull(search));
+        Specification<Patient> spec = Specification
+                .where(PatientSpecifications.belongsToClinic(clinicId))
+                .and(PatientSpecifications.hasStatus(status))
+                .and(PatientSpecifications.hasMainTherapist(emptyToNull(therapistId)))
+                .and(PatientSpecifications.nameContains(emptyToNull(search)));
+
+        return patientRepository.findAll(spec,
+                Sort.by(Sort.Order.asc("lastName"), Sort.Order.asc("firstName")));
     }
 
     @Transactional(readOnly = true)
