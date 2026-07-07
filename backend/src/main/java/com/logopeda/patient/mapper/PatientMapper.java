@@ -22,6 +22,7 @@ public class PatientMapper {
                 patient.getReferralSource(),
                 patient.getReasonForConsultation(),
                 patient.getRelevantNotes(),
+                patient.getCenterId(),
                 patient.getCreatedAt(),
                 patient.getUpdatedAt());
     }

@@ -1,394 +1,643 @@
-# AGENT.md
+# AGENT.md — LogoPlus Public Landing Page
 
-## Objetivo del agente
+## Mission
 
-Este proyecto debe soportar internacionalización en la interfaz web, manteniendo el castellano como idioma principal y por defecto.
+Implement a public landing page for **LogoPlus**, a SaaS product for speech therapists, therapists, early childhood centers, child psychologists, occupational therapists and small clinics.
 
-La aplicación debe estar disponible en:
-
-* Castellano / Español (`es`)
-* Euskera (`eu`)
-* Inglés (`en`)
-
-El idioma principal del producto es el castellano. Todas las nuevas funcionalidades, textos y pantallas deben diseñarse primero en castellano y después traducirse a euskera e inglés.
+The landing page must communicate the product clearly, allow users to enter either as a clinic/professional or as a family/client, and document the pricing plans.
 
 ---
 
-## Regla principal de idioma
+## Current product context
 
-El idioma por defecto de la aplicación es siempre:
+LogoPlus is a clinical management SaaS.
 
-```txt
-es
-```
+Current stack:
 
-No se debe usar inglés como idioma por defecto.
+* Backend: Spring Boot 3.2.5, Java 21.
+* Frontend: React 18, Vite, TypeScript.
+* Auth: JWT.
+* Roles:
+  * `CLINIC_ADMIN`
+  * `THERAPIST`
+  * `RECEPTION`
+  * `FAMILY`
 
-No se debe cambiar automáticamente el idioma inicial basándose únicamente en el idioma del navegador. Si no existe una preferencia previa del usuario, la aplicación debe arrancar en castellano.
+Existing modules:
 
-Orden correcto de resolución del idioma:
+* Clinics.
+* Users and roles.
+* Patients.
+* Guardians/families.
+* Agenda.
+* Sessions.
+* Therapeutic goals.
+* Report templates.
+* PDF generation.
+* Consents.
+* Documents.
+* Basic family portal.
+* Billing.
+* Notifications.
+* Audit logs.
 
-1. Idioma guardado por el usuario, si existe y es válido.
-2. Castellano (`es`) como fallback obligatorio.
+Important product positioning:
 
-No usar este orden:
-
-1. Idioma del navegador.
-2. Inglés.
-3. Castellano.
+* LogoPlus does not perform clinical AI.
+* LogoPlus does not diagnose.
+* LogoPlus does not recommend therapies automatically.
+* Professionals make all clinical decisions.
+* The app supports documentation, organization and communication.
 
 ---
 
-## Idiomas soportados
+## Main objective
 
-Los únicos idiomas soportados inicialmente son:
+Create a public landing page available at:
 
-```txt
-es
-eu
-en
+```text
+/
 ```
 
-Cualquier otro valor debe considerarse inválido y resolverse a castellano.
+This route must be public and must not require authentication.
 
-Ejemplo:
+The existing authenticated application must remain available after login.
+
+---
+
+## Required landing structure
+
+The landing page must include:
+
+1. Hero section.
+2. Product explanation section.
+3. Benefits section.
+4. Features section.
+5. Section for clinics/professionals.
+6. Section for families/clients.
+7. Pricing section.
+8. FAQ section.
+9. Final CTA section.
+10. Footer.
+
+---
+
+## Public access buttons
+
+The landing must have two clear access buttons.
+
+### Clinic access button
+
+Text:
+
+```text
+Acceder como clínica
+```
+
+Preferred route:
+
+```text
+/login?type=clinic
+```
+
+Fallback route:
+
+```text
+/login
+```
+
+### Family access button
+
+Text:
+
+```text
+Acceder como familia
+```
+
+Preferred route:
+
+```text
+/login?type=family
+```
+
+Fallback route:
+
+```text
+/login
+```
+
+Do not create separate login screens unless the current architecture already supports it naturally.
+
+---
+
+## Suggested copy
+
+### Hero title
+
+```text
+Gestiona tu clínica terapéutica desde un solo lugar
+```
+
+### Hero subtitle
+
+```text
+LogoPlus ayuda a logopedas, terapeutas y clínicas pequeñas a organizar pacientes, sesiones, informes, consentimientos, documentos, agenda, tareas para casa y comunicación con familias.
+```
+
+### Clinical safety note
+
+```text
+Sin IA clínica. Sin diagnóstico automático. LogoPlus ayuda a documentar y organizar, pero las decisiones clínicas siempre las toma el profesional.
+```
+
+---
+
+## Benefits section
+
+Use cards or clean blocks.
+
+Required benefits:
+
+* Menos tiempo haciendo informes.
+* Información del paciente centralizada.
+* Mejor comunicación con familias.
+* Consentimientos y documentos organizados.
+* Agenda, sesiones y objetivos conectados.
+* Preparado para clínicas pequeñas y equipos.
+
+---
+
+## Features section
+
+Group features into three areas.
+
+### Gestión clínica
+
+* Pacientes.
+* Tutores y familias.
+* Agenda.
+* Sesiones.
+* Objetivos terapéuticos.
+* Informes en PDF.
+* Consentimientos.
+* Documentos.
+
+### Portal familiar
+
+* Acceso familiar seguro.
+* Informes compartidos.
+* Documentos visibles.
+* Consentimientos.
+* Tareas para casa.
+* Evidencias de familia.
+
+### Administración
+
+* Usuarios y roles.
+* Clínicas.
+* Facturación.
+* Pagos.
+* Auditoría.
+* Notificaciones.
+
+---
+
+## Clinics/professionals section
+
+Title:
+
+```text
+Para clínicas y profesionales
+```
+
+Text:
+
+```text
+Centraliza la operativa diaria de tu centro: agenda, pacientes, sesiones, informes, consentimientos, documentos, tareas y facturación. Diseñado para reducir trabajo administrativo sin sustituir el criterio profesional.
+```
+
+CTA:
+
+```text
+Entrar como clínica
+```
+
+Route:
+
+```text
+/login?type=clinic
+```
+
+---
+
+## Families/clients section
+
+Title:
+
+```text
+Para familias
+```
+
+Text:
+
+```text
+Accede de forma segura a la información compartida por tu clínica: próximas citas, informes, documentos, consentimientos, tareas para casa y comunicaciones importantes.
+```
+
+CTA:
+
+```text
+Entrar como familia
+```
+
+Route:
+
+```text
+/login?type=family
+```
+
+---
+
+## Pricing section
+
+Create a section named:
+
+```text
+Precios
+```
+
+The pricing plans must be easy to edit in code.
+
+Prefer a constant/array such as:
 
 ```ts
-const DEFAULT_LOCALE = "es";
+const pricingPlans = [...]
+```
 
-const SUPPORTED_LOCALES = ["es", "eu", "en"] as const;
+Do not hardcode repeated markup manually if a data-driven structure is easy.
+
+---
+
+### Plan 1 — Profesional
+
+Price:
+
+```text
+29 €/mes
+```
+
+Description:
+
+```text
+Para profesionales autónomos que quieren organizar pacientes, sesiones e informes.
+```
+
+Features:
+
+* 1 usuario profesional.
+* Hasta 40 pacientes activos.
+* Agenda básica.
+* Sesiones y objetivos.
+* Informes PDF.
+* Consentimientos.
+* Portal familiar básico.
+* Soporte por email.
+
+CTA:
+
+```text
+Empezar con Profesional
 ```
 
 ---
 
-## Selector de idioma
+### Plan 2 — Clínica
 
-La web debe incluir un selector de idioma visible para el usuario.
+Price:
 
-Opciones visibles recomendadas:
-
-```txt
-Castellano
-Euskera
-English
+```text
+79 €/mes
 ```
 
-Valores internos:
+Description:
 
-```txt
-es
-eu
-en
+```text
+Para clínicas pequeñas con varios profesionales y mayor volumen de pacientes.
 ```
 
-El selector debe:
+Features:
 
-* Mostrar el idioma actualmente activo.
-* Permitir cambiar entre castellano, euskera e inglés.
-* Guardar la preferencia del usuario.
-* Aplicar el cambio en la UI sin romper el estado actual de la aplicación.
+* Hasta 5 usuarios.
+* Hasta 200 pacientes activos.
+* Agenda por profesionales.
+* Informes y plantillas.
+* Documentos y consentimientos.
+* Portal familiar.
+* Tareas para casa.
+* Facturación.
+* Soporte prioritario.
 
----
+CTA:
 
-## Persistencia del idioma
-
-La preferencia de idioma debe persistirse en el navegador.
-
-Mecanismo recomendado:
-
-```txt
-localStorage
+```text
+Empezar con Clínica
 ```
 
-Clave recomendada:
+Mark this plan as:
 
-```txt
-app.locale
-```
-
-Comportamiento esperado:
-
-* Si `localStorage["app.locale"]` existe y es `es`, `eu` o `en`, usar ese idioma.
-* Si no existe, usar `es`.
-* Si existe pero tiene un valor inválido, ignorarlo y usar `es`.
-
----
-
-## Fallback de traducciones
-
-El fallback obligatorio es castellano.
-
-Si falta una traducción en euskera o inglés, la aplicación debe mostrar el texto castellano correspondiente.
-
-Nunca debe mostrarse una clave técnica al usuario final salvo en entorno de desarrollo.
-
-Ejemplo no deseado:
-
-```txt
-billing.payments.exportButton
-```
-
-Ejemplo correcto:
-
-```txt
-Exportar pagos
+```text
+Recomendado
 ```
 
 ---
 
-## Organización recomendada de traducciones
+### Plan 3 — Centro
 
-Agrupar las traducciones por dominio funcional.
+Price:
 
-Estructura recomendada:
-
-```txt
-src/
-  i18n/
-    index.ts
-    locales/
-      es.json
-      eu.json
-      en.json
+```text
+149 €/mes
 ```
 
-O, si el proyecto ya tiene otra estructura, respetarla y adaptarse a ella.
+Description:
 
-Ejemplo de claves:
+```text
+Para centros con varios perfiles, mayor volumen operativo y necesidades avanzadas.
+```
 
-```json
-{
-  "common": {
-    "save": "Guardar",
-    "cancel": "Cancelar",
-    "delete": "Eliminar",
-    "edit": "Editar",
-    "search": "Buscar",
-    "loading": "Cargando..."
-  },
-  "navigation": {
-    "patients": "Pacientes",
-    "sessions": "Sesiones",
-    "payments": "Pagos",
-    "fees": "Tarifas",
-    "exports": "Exportaciones"
-  },
-  "billing": {
-    "title": "Facturación",
-    "payments": {
-      "title": "Pagos",
-      "exportCsv": "Exportar pagos"
-    },
-    "pendingSessions": {
-      "title": "Sesiones pendientes",
-      "exportCsv": "Exportar sesiones pendientes"
-    },
-    "fees": {
-      "title": "Tarifas",
-      "exportCsv": "Exportar tarifas"
-    },
-    "summary": {
-      "title": "Resumen de facturación",
-      "exportCsv": "Exportar resumen"
-    }
-  }
-}
+Features:
+
+* Usuarios ampliados.
+* Pacientes ampliados.
+* Multi-centro.
+* Exportación de historia.
+* Cuestionarios.
+* Evolución visual.
+* Integraciones.
+* Soporte avanzado.
+
+CTA:
+
+```text
+Contactar
 ```
 
 ---
 
-## Textos hardcodeados
+## Pricing disclaimer
 
-No deben quedar textos visibles hardcodeados en componentes.
+Show this note below the plans:
 
-Incorrecto:
-
-```tsx
-<button>Guardar</button>
+```text
+Precios orientativos. Los importes pueden ajustarse según volumen, número de profesionales e integraciones necesarias.
 ```
 
-Correcto:
+Do not implement real Stripe checkout as part of this task unless the project already has a fully configured Stripe flow.
 
-```tsx
-<button>{t("common.save")}</button>
+Pricing CTAs can route to:
+
+```text
+/login
 ```
 
-También deben traducirse:
+or, if registration exists:
 
-* Títulos.
-* Botones.
-* Labels.
-* Placeholders.
-* Mensajes de error.
-* Mensajes de éxito.
-* Validaciones.
-* Modales.
-* Confirmaciones.
-* Estados vacíos.
-* Cabeceras de tabla.
-* Tooltips.
-* Textos de navegación.
-* Acciones de exportación.
-* Textos relacionados con pacientes, sesiones, pagos, tarifas y facturación.
+```text
+/auth/register-clinic-admin
+```
+
+For frontend routing, prefer:
+
+```text
+/login?plan=professional
+/login?plan=clinic
+/login?plan=center
+```
+
+Only use these query params if they do not break existing login behavior.
 
 ---
 
-## Castellano como fuente principal
+## FAQ section
 
-Cuando se añadan nuevos textos:
+Include these questions and answers.
 
-1. Añadir primero la clave en castellano.
-2. Añadir después la traducción en euskera.
-3. Añadir después la traducción en inglés.
+### Question 1
 
-El fichero `es` debe considerarse la referencia funcional.
-
-Si una traducción no está clara, mantener la aplicación funcional y añadir un TODO claro en el fichero afectado.
-
-Ejemplo:
-
-```json
-{
-  "billing": {
-    "summary": {
-      "title": "TODO: revisar traducción"
-    }
-  }
-}
+```text
+¿LogoPlus hace diagnóstico automático?
 ```
 
----
+Answer:
 
-## Reglas para nuevas pantallas
-
-Toda nueva pantalla debe:
-
-* Usar claves i18n desde el inicio.
-* No introducir literales visibles directamente en JSX/HTML/templates.
-* Usar castellano como fallback.
-* Añadir las claves en los tres idiomas.
-* Mantener nombres de clave consistentes con el resto del proyecto.
-
----
-
-## Reglas para formularios
-
-Los formularios deben traducir:
-
-* Labels.
-* Placeholders.
-* Ayudas.
-* Errores de validación.
-* Mensajes de campo obligatorio.
-* Mensajes de formato inválido.
-* Botones de enviar, cancelar, limpiar o guardar.
-
-Ejemplo de claves:
-
-```json
-{
-  "patients": {
-    "form": {
-      "name": {
-        "label": "Nombre",
-        "placeholder": "Introduce el nombre"
-      },
-      "required": "Este campo es obligatorio"
-    }
-  }
-}
+```text
+No. LogoPlus no diagnostica ni recomienda tratamientos. Es una herramienta de gestión y documentación.
 ```
 
----
+### Question 2
 
-## Reglas para errores
-
-Los errores visibles para el usuario deben traducirse.
-
-No mostrar directamente errores técnicos del backend salvo que ya estén normalizados para usuario final.
-
-Preferir mensajes claros:
-
-```txt
-No se han podido cargar los pagos.
+```text
+¿Las familias pueden ver todos los datos?
 ```
 
-En lugar de:
+Answer:
 
-```txt
-Error 500: Internal Server Error
+```text
+No. Las familias solo ven la información que la clínica comparte y únicamente de los pacientes vinculados.
+```
+
+### Question 3
+
+```text
+¿Puedo generar informes?
+```
+
+Answer:
+
+```text
+Sí. LogoPlus permite trabajar con plantillas y generar informes en PDF.
+```
+
+### Question 4
+
+```text
+¿Sirve para logopedas autónomos?
+```
+
+Answer:
+
+```text
+Sí. Está pensado tanto para profesionales independientes como para clínicas pequeñas.
+```
+
+### Question 5
+
+```text
+¿Puedo gestionar consentimientos?
+```
+
+Answer:
+
+```text
+Sí. La plataforma permite emitir, consultar y firmar consentimientos según la funcionalidad disponible.
+```
+
+### Question 6
+
+```text
+¿Los precios son definitivos?
+```
+
+Answer:
+
+```text
+No necesariamente. Son planes orientativos y pueden ajustarse según el tamaño de la clínica.
 ```
 
 ---
 
-## Reglas para facturación y exportaciones
+## Design requirements
 
-La aplicación contiene funcionalidades relacionadas con facturación, pagos, sesiones pendientes, tarifas y resúmenes.
+The landing must be:
 
-Todos los textos de estas zonas deben estar internacionalizados:
+* Professional.
+* Modern.
+* Clean.
+* Responsive.
+* Suitable for a healthcare/therapy SaaS.
+* Clear on desktop and mobile.
+* Calm, trustworthy and not overly aggressive.
 
-* Exportar pagos.
-* Exportar sesiones pendientes.
-* Exportar tarifas.
-* Exportar resumen de facturación.
-* Fechas desde/hasta.
-* Paciente.
-* Estado activo/inactivo.
-* Importes.
-* Sesiones.
-* Pagos.
-* CSV.
-* Mensajes de descarga.
-* Mensajes de error al exportar.
+Recommended visual style:
 
-El idioma de la interfaz no debe cambiar el contrato de los endpoints ni la lógica de negocio.
+* Soft background.
+* Clear headings.
+* Cards for benefits and pricing.
+* Rounded containers.
+* Good spacing.
+* Clear CTAs.
+* No clutter.
+* No exaggerated medical claims.
 
----
+Use the existing design system if the project has one.
 
-## No modificar backend salvo necesidad
-
-La internacionalización afecta principalmente a la web/frontend.
-
-No modificar:
-
-* Endpoints.
-* DTOs.
-* Entidades.
-* Repositorios.
-* Servicios de negocio.
-* Seguridad.
-* Lógica de facturación.
-
-Solo modificar backend si existe una razón técnica imprescindible y documentarla claramente.
+If there is no existing design system, create maintainable CSS.
 
 ---
 
-## Calidad esperada
+## Frontend implementation rules
 
-Antes de terminar cualquier tarea de i18n, comprobar:
+Before coding:
 
-* La aplicación compila.
-* No hay imports muertos.
-* No hay claves duplicadas innecesarias.
-* No quedan textos principales hardcodeados.
-* El selector de idioma funciona.
-* El idioma se guarda correctamente.
-* El fallback a castellano funciona.
-* El idioma por defecto es castellano.
-* Los tests existentes siguen pasando, si existen.
+1. Inspect the current frontend structure.
+2. Find the router.
+3. Find protected route logic.
+4. Find the login page.
+5. Check existing CSS/global styling approach.
+
+Implementation:
+
+* Add landing page as public route `/`.
+* Keep login route public.
+* Keep authenticated app routes protected.
+* Do not break current auth flow.
+* Do not remove existing pages.
+* Do not duplicate large amounts of layout code unnecessarily.
+* Use TypeScript types where useful.
+
+Suggested component structure:
+
+```text
+src/pages/LandingPage.tsx
+src/components/landing/LandingHero.tsx
+src/components/landing/LandingBenefits.tsx
+src/components/landing/LandingFeatures.tsx
+src/components/landing/LandingPricing.tsx
+src/components/landing/LandingFaq.tsx
+src/components/landing/LandingFooter.tsx
+```
+
+If the current project structure is simpler, adapt to the existing conventions.
 
 ---
 
-## Criterios de aceptación
+## Backend implementation rules
 
-Una tarea de internacionalización se considera terminada cuando:
+Backend changes should usually not be required.
 
-* La web abre en castellano por defecto.
-* Existe selector de idioma.
-* Se puede cambiar a euskera.
-* Se puede cambiar a inglés.
-* El idioma elegido se mantiene al recargar.
-* Si se elimina la preferencia, vuelve a castellano.
-* Los textos visibles principales están traducidos.
-* El fallback a castellano está configurado.
-* No se ha alterado la lógica de negocio.
+Only touch backend if:
+
+* The production SPA routing requires fallback configuration.
+* Static serving needs adjustment.
+* Existing security accidentally blocks public SPA entry.
+
+Do not add new backend business logic for this task.
+
+Do not implement billing APIs in this task.
+
+---
+
+## Acceptance criteria
+
+The task is complete when:
+
+* Visiting `/` displays the public landing page.
+* No login is required to view `/`.
+* “Acceder como clínica” routes to login.
+* “Acceder como familia” routes to login.
+* The pricing section displays the three plans.
+* The landing is responsive.
+* Existing login still works.
+* Existing private routes remain protected.
+* Frontend build passes.
+* README mentions the new public landing page.
+* No clinical AI or automatic diagnosis claims were added.
+* No real payment integration was added unless already safely supported.
+
+---
+
+## Validation commands
+
+Run:
+
+```bash
+cd frontend
+npm install
+npm run build
+```
+
+If backend is modified, also run:
+
+```bash
+cd backend
+mvn test
+```
+
+---
+
+## README update
+
+Update the README with:
+
+* New public landing page at `/`.
+* Purpose of the landing.
+* Access buttons for clinic and family.
+* Pricing section.
+* Note that prices are currently configurable/orientative.
+* Note that the landing is public and the app remains protected behind login.
+
+---
+
+## Definition of done
+
+A user opening the app for the first time should understand:
+
+* What LogoPlus is.
+* Who it is for.
+* What problems it solves.
+* What features it includes.
+* How much it costs approximately.
+* How to access as a clinic.
+* How to access as a family.
+
+Existing authenticated functionality must remain intact.

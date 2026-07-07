@@ -19,6 +19,7 @@ public record PatientResponse(
         String referralSource,
         String reasonForConsultation,
         String relevantNotes,
+        String centerId,
         Instant createdAt,
         Instant updatedAt) {
 }

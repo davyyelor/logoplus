@@ -12,6 +12,7 @@ public record UserResponse(
         String lastName,
         Role role,
         boolean active,
+        String centerId,
         Instant createdAt,
         Instant updatedAt) {
 }

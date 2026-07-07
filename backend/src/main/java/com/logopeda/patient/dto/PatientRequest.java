@@ -28,5 +28,8 @@ public record PatientRequest(
         String reasonForConsultation,
 
         @Size(max = 4000)
-        String relevantNotes) {
+        String relevantNotes,
+
+        @Size(max = 36)
+        String centerId) {
 }

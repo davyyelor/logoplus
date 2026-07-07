@@ -2,6 +2,7 @@ package com.logopeda.patient.service;
 
 import com.logopeda.audit.service.AuditService;
 import com.logopeda.billing.exception.ResourceNotFoundException;
+import com.logopeda.center.service.CenterService;
 import com.logopeda.patient.dto.PatientRequest;
 import com.logopeda.patient.enums.PatientStatus;
 import com.logopeda.patient.model.Patient;
@@ -20,12 +21,14 @@ public class PatientService {
     private final PatientRepository patientRepository;
     private final TenantContext tenantContext;
     private final AuditService auditService;
+    private final CenterService centerService;
 
     public PatientService(PatientRepository patientRepository, TenantContext tenantContext,
-                          AuditService auditService) {
+                          AuditService auditService, CenterService centerService) {
         this.patientRepository = patientRepository;
         this.tenantContext = tenantContext;
         this.auditService = auditService;
+        this.centerService = centerService;
     }
 
     @Transactional(readOnly = true)
@@ -85,6 +88,9 @@ public class PatientService {
         patient.setReferralSource(request.referralSource());
         patient.setReasonForConsultation(request.reasonForConsultation());
         patient.setRelevantNotes(request.relevantNotes());
+        String centerId = emptyToNull(request.centerId());
+        centerService.requireCenterInClinic(centerId);
+        patient.setCenterId(centerId);
     }
 
     private Patient findOwned(String clinicId, String id) {

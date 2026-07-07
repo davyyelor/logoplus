@@ -20,5 +20,8 @@ public record UpdateUserRequest(
         Role role,
 
         @Size(min = 8, message = "password must be at least 8 characters")
-        String password) {
+        String password,
+
+        @Size(max = 36)
+        String centerId) {
 }

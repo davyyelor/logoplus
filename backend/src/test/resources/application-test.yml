@@ -1,0 +1,30 @@
+# ---------------------------------------------------------------------------
+# Test profile — always H2 in-memory, independent of Supabase.
+#
+# Activated via @ActiveProfiles("test") on the integration/unit tests. Keeping
+# a dedicated profile guarantees the test suite never tries to reach Supabase
+# even if SUPABASE_DB_* variables happen to be present in the environment.
+# ---------------------------------------------------------------------------
+spring:
+  datasource:
+    url: jdbc:h2:mem:billingdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.H2Dialect
+  flyway:
+    enabled: false
+  h2:
+    console:
+      enabled: false
+
+app:
+  # Tests rely on the demo data seeded by DemoDataSeeder.
+  seed-demo-data: true

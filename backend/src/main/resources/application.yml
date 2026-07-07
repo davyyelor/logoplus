@@ -1,9 +1,30 @@
 server:
   port: 8080
 
+# ---------------------------------------------------------------------------
+# Base configuration shared by every profile.
+#
+# Database selection:
+#   * Supabase PostgreSQL is the primary database (profile `supabase`).
+#   * H2 in-memory is the local/dev/test fallback (profile `h2`, also the
+#     default when no Supabase configuration is present).
+#
+# The active database is chosen automatically at startup by
+# `DatabaseFallbackEnvironmentPostProcessor`:
+#   1. Supabase configured (SUPABASE_DB_URL/USERNAME/PASSWORD) and reachable
+#      -> `supabase` profile (Flyway + ddl-auto=validate on schema `app`).
+#   2. Supabase not configured -> H2 (this file's defaults / `h2` profile).
+#   3. Supabase configured but unreachable:
+#        - APP_DB_FALLBACK_TO_H2=true  -> H2 fallback (local/dev only).
+#        - APP_DB_FALLBACK_TO_H2=false -> startup fails with a clear error.
+#
+# You can also force a profile explicitly with SPRING_PROFILES_ACTIVE=supabase
+# or SPRING_PROFILES_ACTIVE=h2. No real credentials are ever stored here.
+# ---------------------------------------------------------------------------
 spring:
   application:
     name: billing-backend
+  # Default datasource is H2 in-memory. The `supabase` profile overrides it.
   datasource:
     url: jdbc:h2:mem:billingdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL
     driver-class-name: org.h2.Driver
@@ -46,7 +67,26 @@ app:
       application/msword,
       application/vnd.openxmlformats-officedocument.wordprocessingml.document,
       text/plain
-  seed-demo-data: true
+  seed-demo-data: ${APP_SEED_DEMO_DATA:true}
+
+  # V2 external integrations. All disabled by default; they never contact
+  # external services unless explicitly enabled with valid credentials.
+  stripe:
+    mode: ${STRIPE_MODE:disabled}
+    secret-key: ${STRIPE_SECRET_KEY:}
+    webhook-secret: ${STRIPE_WEBHOOK_SECRET:}
+    platform-fee-percent: ${STRIPE_PLATFORM_FEE_PERCENT:0}
+  calendar:
+    provider: ${CALENDAR_PROVIDER:disabled}
+    google-client-id: ${GOOGLE_CALENDAR_CLIENT_ID:}
+    google-client-secret: ${GOOGLE_CALENDAR_CLIENT_SECRET:}
+    outlook-client-id: ${OUTLOOK_CALENDAR_CLIENT_ID:}
+    outlook-client-secret: ${OUTLOOK_CALENDAR_CLIENT_SECRET:}
+  # Electronic signature provider. `internal-basic` (default) is the built-in
+  # simple signature; `advanced-disabled` is a placeholder for an external
+  # qualified-signature integration that is intentionally disabled.
+  signature:
+    provider: ${SIGNATURE_PROVIDER:internal-basic}
 
 # Billing module configuration.
 # Future third-party integrations are disabled in this MVP. They are wired as

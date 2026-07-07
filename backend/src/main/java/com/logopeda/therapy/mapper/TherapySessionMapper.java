@@ -23,6 +23,7 @@ public class TherapySessionMapper {
                 session.getObservations(),
                 session.getHomework(),
                 session.getNextSteps(),
+                session.getCenterId(),
                 session.getCreatedAt(),
                 session.getUpdatedAt());
     }

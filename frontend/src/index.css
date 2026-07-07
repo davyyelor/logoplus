@@ -466,6 +466,19 @@ tbody tr:last-child td {
   color: var(--muted);
 }
 
+.login__back {
+  display: block;
+  margin: 12px 0 0;
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.login__back:hover {
+  text-decoration: underline;
+}
+
 .field__label {
   font-size: 0.8rem;
   color: var(--muted);

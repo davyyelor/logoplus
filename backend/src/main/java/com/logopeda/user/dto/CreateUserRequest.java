@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
 /** Payload to create a user. Password is required on creation. */
 public record CreateUserRequest(
         @NotBlank(message = "email is required")
@@ -23,5 +22,8 @@ public record CreateUserRequest(
         String lastName,
 
         @NotNull(message = "role is required")
-        Role role) {
+        Role role,
+
+        @Size(max = 36)
+        String centerId) {
 }

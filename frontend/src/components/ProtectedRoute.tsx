@@ -24,7 +24,7 @@ export function ProtectedRoute({ children, roles }: Readonly<ProtectedRouteProps
     return <Navigate to="/login" replace />;
   }
   if (roles && !roles.includes(user.role)) {
-    return <Navigate to={user.role === "FAMILY" ? "/portal" : "/"} replace />;
+    return <Navigate to={user.role === "FAMILY" ? "/portal" : "/dashboard"} replace />;
   }
   return <>{children}</>;
 }

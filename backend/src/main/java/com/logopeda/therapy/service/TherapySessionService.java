@@ -21,12 +21,15 @@ public class TherapySessionService {
     private final TherapySessionRepository sessionRepository;
     private final PatientAccessGuard patientAccessGuard;
     private final TenantContext tenantContext;
+    private final com.logopeda.center.service.CenterService centerService;
 
     public TherapySessionService(TherapySessionRepository sessionRepository,
-                                 PatientAccessGuard patientAccessGuard, TenantContext tenantContext) {
+                                 PatientAccessGuard patientAccessGuard, TenantContext tenantContext,
+                                 com.logopeda.center.service.CenterService centerService) {
         this.sessionRepository = sessionRepository;
         this.patientAccessGuard = patientAccessGuard;
         this.tenantContext = tenantContext;
+        this.centerService = centerService;
     }
 
     @Transactional(readOnly = true)
@@ -73,6 +76,9 @@ public class TherapySessionService {
         session.setObservations(request.observations());
         session.setHomework(request.homework());
         session.setNextSteps(request.nextSteps());
+        String centerId = blankToNull(request.centerId());
+        centerService.requireCenterInClinic(centerId);
+        session.setCenterId(centerId);
     }
 
     private TherapySession findOwned(String clinicId, String id) {

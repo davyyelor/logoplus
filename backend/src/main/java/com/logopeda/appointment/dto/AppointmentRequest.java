@@ -23,5 +23,7 @@ public record AppointmentRequest(
 
         LocationType locationType,
 
-        String notes) {
+        String notes,
+
+        String centerId) {
 }

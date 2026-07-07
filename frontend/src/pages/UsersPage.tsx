@@ -4,6 +4,7 @@ import { Modal } from "../components/Modal";
 import { StateView } from "../components/StateView";
 import { useAsync } from "../hooks/useAsync";
 import { userService } from "../services/clinicService";
+import { centerService } from "../services/centerService";
 import { type CreateUserRequest, type Role, type UpdateUserRequest, type User } from "../types/api";
 import { humanizeEnum } from "../utils/format";
 
@@ -15,6 +16,7 @@ interface FormState {
   firstName: string;
   lastName: string;
   role: Role;
+  centerId: string;
 }
 
 const EMPTY_FORM: FormState = {
@@ -23,6 +25,7 @@ const EMPTY_FORM: FormState = {
   firstName: "",
   lastName: "",
   role: "THERAPIST",
+  centerId: "",
 };
 
 export function UsersPage() {
@@ -33,6 +36,7 @@ export function UsersPage() {
   const [saving, setSaving] = useState(false);
 
   const { data, loading, error, reload } = useAsync(() => userService.list(), []);
+  const { data: centers } = useAsync(() => centerService.list(), []);
 
   function openCreate() {
     setEditing(null);
@@ -49,6 +53,7 @@ export function UsersPage() {
       firstName: user.firstName,
       lastName: user.lastName,
       role: user.role,
+      centerId: user.centerId ?? "",
     });
     setFormError(null);
     setModalOpen(true);
@@ -69,6 +74,7 @@ export function UsersPage() {
           lastName: form.lastName.trim(),
           role: form.role,
           password: form.password.trim() || null,
+          centerId: form.centerId || null,
         };
         await userService.update(editing.id, request);
       } else {
@@ -83,6 +89,7 @@ export function UsersPage() {
           firstName: form.firstName.trim(),
           lastName: form.lastName.trim(),
           role: form.role,
+          centerId: form.centerId || null,
         };
         await userService.create(request);
       }
@@ -200,6 +207,20 @@ export function UsersPage() {
                 {STAFF_ROLES.map((r) => (
                   <option key={r} value={r}>
                     {humanizeEnum(r)}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="field">
+              Centro
+              <select
+                value={form.centerId}
+                onChange={(e) => setForm((f) => ({ ...f, centerId: e.target.value }))}
+              >
+                <option value="">Sin centro</option>
+                {centers?.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
                   </option>
                 ))}
               </select>

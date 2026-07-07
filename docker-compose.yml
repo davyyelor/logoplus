@@ -1,3 +1,14 @@
+# ==========================================================================
+# DEPRECATED / LEGACY — local PostgreSQL for development only.
+#
+# The application now uses Supabase PostgreSQL as its primary database and
+# H2 in-memory as the local/test fallback (see README and backend/.env.example).
+# Docker is NO LONGER required to run or develop LogoPlus.
+#
+# This file is kept only for teams that still prefer a self-hosted local
+# PostgreSQL. It is not referenced by the app profiles anymore. To use it,
+# rename it back to docker-compose.yml and point SUPABASE_DB_URL at it.
+# ==========================================================================
 services:
   postgres:
     image: postgres:16-alpine

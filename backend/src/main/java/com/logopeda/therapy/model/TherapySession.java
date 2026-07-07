@@ -59,6 +59,10 @@ public class TherapySession extends BaseEntity {
     @Column(length = 4000)
     private String nextSteps;
 
+    /** Optional center within the clinic where this session took place. */
+    @Column(length = 36)
+    private String centerId;
+
     public String getClinicId() {
         return clinicId;
     }
@@ -161,5 +165,13 @@ public class TherapySession extends BaseEntity {
 
     public void setNextSteps(String nextSteps) {
         this.nextSteps = nextSteps;
+    }
+
+    public String getCenterId() {
+        return centerId;
+    }
+
+    public void setCenterId(String centerId) {
+        this.centerId = centerId;
     }
 }

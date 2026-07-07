@@ -24,10 +24,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final com.logopeda.center.service.CenterService centerService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+                       com.logopeda.center.service.CenterService centerService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.centerService = centerService;
     }
 
     @Transactional(readOnly = true)
@@ -53,6 +56,9 @@ public class UserService {
         user.setLastName(request.lastName().trim());
         user.setRole(request.role());
         user.setActive(true);
+        String centerId = StringUtils.hasText(request.centerId()) ? request.centerId().trim() : null;
+        centerService.requireCenterInClinic(centerId);
+        user.setCenterId(centerId);
         return userRepository.save(user);
     }
 
@@ -64,6 +70,9 @@ public class UserService {
         if (StringUtils.hasText(request.password())) {
             user.setPasswordHash(passwordEncoder.encode(request.password()));
         }
+        String centerId = StringUtils.hasText(request.centerId()) ? request.centerId().trim() : null;
+        centerService.requireCenterInClinic(centerId);
+        user.setCenterId(centerId);
         return userRepository.save(user);
     }
 

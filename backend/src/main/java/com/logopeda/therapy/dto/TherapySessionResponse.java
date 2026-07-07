@@ -19,6 +19,7 @@ public record TherapySessionResponse(
         String observations,
         String homework,
         String nextSteps,
+        String centerId,
         Instant createdAt,
         Instant updatedAt) {
 }

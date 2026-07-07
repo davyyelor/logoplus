@@ -10,6 +10,11 @@ import com.logopeda.document.dto.DocumentResponse;
 import com.logopeda.document.enums.DocumentType;
 import com.logopeda.document.mapper.DocumentMapper;
 import com.logopeda.document.service.DocumentService;
+import com.logopeda.evidence.dto.FamilyEvidenceResponse;
+import com.logopeda.evidence.mapper.FamilyEvidenceMapper;
+import com.logopeda.evidence.service.FamilyEvidenceService;
+import com.logopeda.evolution.dto.MetricEvolutionResponse;
+import com.logopeda.evolution.service.EvolutionService;
 import com.logopeda.family.service.FamilyPortalService;
 import com.logopeda.patient.dto.PatientResponse;
 import com.logopeda.patient.mapper.PatientMapper;
@@ -46,27 +51,34 @@ public class FamilyPortalController {
     private final FamilyPortalService portalService;
     private final DocumentService documentService;
     private final PatientConsentService consentService;
+    private final EvolutionService evolutionService;
+    private final FamilyEvidenceService evidenceService;
     private final PatientMapper patientMapper;
     private final AppointmentMapper appointmentMapper;
     private final TherapySessionMapper sessionMapper;
     private final DocumentMapper documentMapper;
     private final ReportMapper reportMapper;
     private final ConsentMapper consentMapper;
+    private final FamilyEvidenceMapper evidenceMapper;
 
     public FamilyPortalController(FamilyPortalService portalService, DocumentService documentService,
-                                  PatientConsentService consentService, PatientMapper patientMapper,
+                                  PatientConsentService consentService, EvolutionService evolutionService,
+                                  FamilyEvidenceService evidenceService, PatientMapper patientMapper,
                                   AppointmentMapper appointmentMapper, TherapySessionMapper sessionMapper,
                                   DocumentMapper documentMapper, ReportMapper reportMapper,
-                                  ConsentMapper consentMapper) {
+                                  ConsentMapper consentMapper, FamilyEvidenceMapper evidenceMapper) {
         this.portalService = portalService;
         this.documentService = documentService;
         this.consentService = consentService;
+        this.evolutionService = evolutionService;
+        this.evidenceService = evidenceService;
         this.patientMapper = patientMapper;
         this.appointmentMapper = appointmentMapper;
         this.sessionMapper = sessionMapper;
         this.documentMapper = documentMapper;
         this.reportMapper = reportMapper;
         this.consentMapper = consentMapper;
+        this.evidenceMapper = evidenceMapper;
     }
 
     @GetMapping("/me/patients")
@@ -97,6 +109,16 @@ public class FamilyPortalController {
     @GetMapping("/patients/{patientId}/consents")
     public List<PatientConsentResponse> consents(@PathVariable String patientId) {
         return portalService.consents(patientId).stream().map(consentMapper::toResponse).toList();
+    }
+
+    @GetMapping("/patients/{patientId}/evolution")
+    public List<MetricEvolutionResponse> evolution(@PathVariable String patientId) {
+        return evolutionService.evolution(patientId);
+    }
+
+    @GetMapping("/patients/{patientId}/evidence")
+    public List<FamilyEvidenceResponse> evidence(@PathVariable String patientId) {
+        return evidenceService.listForPatient(patientId).stream().map(evidenceMapper::toResponse).toList();
     }
 
     @PostMapping("/patients/{patientId}/documents")

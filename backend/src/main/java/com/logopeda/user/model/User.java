@@ -39,6 +39,10 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private boolean active = true;
 
+    /** Optional center within the clinic this user is primarily assigned to. */
+    @Column(length = 36)
+    private String centerId;
+
     public String getClinicId() {
         return clinicId;
     }
@@ -93,6 +97,14 @@ public class User extends BaseEntity {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public String getCenterId() {
+        return centerId;
+    }
+
+    public void setCenterId(String centerId) {
+        this.centerId = centerId;
     }
 
     public String getFullName() {

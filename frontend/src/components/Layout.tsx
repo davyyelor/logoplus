@@ -11,21 +11,29 @@ interface NavItem {
 }
 
 const STAFF_NAV: NavItem[] = [
-  { to: "/", label: "Panel", end: true },
+  { to: "/dashboard", label: "Panel", end: true },
   { to: "/patients", label: "Pacientes" },
   { to: "/appointments", label: "Agenda" },
   { to: "/sessions", label: "Sesiones", roles: ["CLINIC_ADMIN", "THERAPIST"] },
   { to: "/report-templates", label: "Plantillas de informe", roles: ["CLINIC_ADMIN", "THERAPIST"] },
   { to: "/consent-templates", label: "Plantillas de consentimiento", roles: ["CLINIC_ADMIN", "THERAPIST"] },
+  { to: "/questionnaires", label: "Cuestionarios", roles: ["CLINIC_ADMIN", "THERAPIST"] },
+  { to: "/reminders", label: "Recordatorios" },
   { to: "/billing", label: "Facturación" },
   { to: "/payments", label: "Pagos" },
   { to: "/fees", label: "Tarifas" },
   { to: "/session-billing", label: "Cobro de sesiones" },
+  { to: "/billing/stripe", label: "Cobros Stripe" },
   { to: "/users", label: "Usuarios", roles: ["CLINIC_ADMIN"] },
+  { to: "/settings/centers", label: "Centros", roles: ["CLINIC_ADMIN"] },
+  { to: "/settings/integrations", label: "Integraciones", roles: ["CLINIC_ADMIN"] },
   { to: "/clinic", label: "Clínica", roles: ["CLINIC_ADMIN"] },
 ];
 
-const FAMILY_NAV: NavItem[] = [{ to: "/portal", label: "Portal familiar", end: true }];
+const FAMILY_NAV: NavItem[] = [
+  { to: "/portal", label: "Portal familiar", end: true },
+  { to: "/portal/signatures", label: "Firmas" },
+];
 
 export function Layout({ children }: Readonly<{ children: ReactNode }>) {
   const { user, logout, hasRole } = useAuth();

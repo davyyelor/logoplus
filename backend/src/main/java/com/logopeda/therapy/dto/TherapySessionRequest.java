@@ -43,5 +43,8 @@ public record TherapySessionRequest(
         String homework,
 
         @Size(max = 4000)
-        String nextSteps) {
+        String nextSteps,
+
+        @Size(max = 36)
+        String centerId) {
 }

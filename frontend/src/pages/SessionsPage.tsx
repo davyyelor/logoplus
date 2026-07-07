@@ -5,6 +5,7 @@ import { StateView } from "../components/StateView";
 import { useAsync } from "../hooks/useAsync";
 import { patientService } from "../services/patientService";
 import { sessionService, type SessionFilters } from "../services/sessionService";
+import { centerService } from "../services/centerService";
 import {
   SESSION_TYPES,
   type SessionType,
@@ -25,6 +26,7 @@ interface FormState {
   observations: string;
   homework: string;
   nextSteps: string;
+  centerId: string;
 }
 
 const EMPTY_FORM: FormState = {
@@ -39,6 +41,7 @@ const EMPTY_FORM: FormState = {
   observations: "",
   homework: "",
   nextSteps: "",
+  centerId: "",
 };
 
 export function SessionsPage() {
@@ -51,6 +54,7 @@ export function SessionsPage() {
 
   const { data, loading, error, reload } = useAsync(() => sessionService.list(filters), [filters]);
   const { data: patients } = useAsync(() => patientService.list({ status: "ACTIVE" }), []);
+  const { data: centers } = useAsync(() => centerService.list(), []);
 
   const patientName = (id: string) => patients?.find((p) => p.id === id)?.fullName ?? id;
 
@@ -75,6 +79,7 @@ export function SessionsPage() {
       observations: session.observations ?? "",
       homework: session.homework ?? "",
       nextSteps: session.nextSteps ?? "",
+      centerId: session.centerId ?? "",
     });
     setFormError(null);
     setModalOpen(true);
@@ -99,6 +104,7 @@ export function SessionsPage() {
       observations: form.observations.trim() || null,
       homework: form.homework.trim() || null,
       nextSteps: form.nextSteps.trim() || null,
+      centerId: form.centerId || null,
     };
     setSaving(true);
     setFormError(null);
@@ -241,6 +247,20 @@ export function SessionsPage() {
                 {SESSION_TYPES.map((t) => (
                   <option key={t} value={t}>
                     {humanizeEnum(t)}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="field">
+              Centro
+              <select
+                value={form.centerId}
+                onChange={(e) => setForm((f) => ({ ...f, centerId: e.target.value }))}
+              >
+                <option value="">Sin centro</option>
+                {centers?.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
                   </option>
                 ))}
               </select>

@@ -1,0 +1,33 @@
+# ---------------------------------------------------------------------------
+# H2 profile — in-memory database for local development and tests.
+#
+# This profile is the fallback when Supabase is not configured or not
+# reachable (see application.yml and DatabaseFallbackEnvironmentPostProcessor).
+# It requires no external service and seeds demo data by default.
+#
+# Activate explicitly with SPRING_PROFILES_ACTIVE=h2.
+# ---------------------------------------------------------------------------
+spring:
+  datasource:
+    url: jdbc:h2:mem:billingdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.H2Dialect
+  flyway:
+    enabled: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+app:
+  # Demo data is seeded by default under H2 (handy for local dev and tests).
+  seed-demo-data: ${APP_SEED_DEMO_DATA:true}

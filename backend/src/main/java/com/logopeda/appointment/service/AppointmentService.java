@@ -22,12 +22,15 @@ public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final PatientAccessGuard patientAccessGuard;
     private final TenantContext tenantContext;
+    private final com.logopeda.center.service.CenterService centerService;
 
     public AppointmentService(AppointmentRepository appointmentRepository,
-                              PatientAccessGuard patientAccessGuard, TenantContext tenantContext) {
+                              PatientAccessGuard patientAccessGuard, TenantContext tenantContext,
+                              com.logopeda.center.service.CenterService centerService) {
         this.appointmentRepository = appointmentRepository;
         this.patientAccessGuard = patientAccessGuard;
         this.tenantContext = tenantContext;
+        this.centerService = centerService;
     }
 
     @Transactional(readOnly = true)
@@ -75,6 +78,9 @@ public class AppointmentService {
         appointment.setLocationType(request.locationType() != null
                 ? request.locationType() : LocationType.IN_PERSON);
         appointment.setNotes(request.notes());
+        String centerId = blankToNull(request.centerId());
+        centerService.requireCenterInClinic(centerId);
+        appointment.setCenterId(centerId);
     }
 
     private void validateRange(Instant start, Instant end) {

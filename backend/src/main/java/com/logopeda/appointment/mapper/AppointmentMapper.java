@@ -19,6 +19,7 @@ public class AppointmentMapper {
                 appointment.getStatus(),
                 appointment.getLocationType(),
                 appointment.getNotes(),
+                appointment.getCenterId(),
                 appointment.getCreatedAt(),
                 appointment.getUpdatedAt());
     }

@@ -50,6 +50,10 @@ public class Appointment extends BaseEntity {
     @Column(length = 2000)
     private String notes;
 
+    /** Optional center within the clinic where this appointment takes place. */
+    @Column(length = 36)
+    private String centerId;
+
     public String getClinicId() {
         return clinicId;
     }
@@ -120,5 +124,13 @@ public class Appointment extends BaseEntity {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String getCenterId() {
+        return centerId;
+    }
+
+    public void setCenterId(String centerId) {
+        this.centerId = centerId;
     }
 }

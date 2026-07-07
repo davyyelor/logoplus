@@ -6,6 +6,8 @@ import { StatusBadge } from "../components/StatusBadge";
 import { useAsync } from "../hooks/useAsync";
 import { appointmentService, type AppointmentFilters } from "../services/appointmentService";
 import { patientService } from "../services/patientService";
+import { centerService } from "../services/centerService";
+import { calendarService } from "../services/integrationService";
 import {
   LOCATION_TYPES,
   type Appointment,
@@ -22,6 +24,7 @@ interface FormState {
   endDateTime: string;
   locationType: LocationType;
   notes: string;
+  centerId: string;
 }
 
 const EMPTY_FORM: FormState = {
@@ -32,6 +35,7 @@ const EMPTY_FORM: FormState = {
   endDateTime: "",
   locationType: "IN_PERSON",
   notes: "",
+  centerId: "",
 };
 
 export function AppointmentsPage() {
@@ -47,6 +51,7 @@ export function AppointmentsPage() {
     [filters],
   );
   const { data: patients } = useAsync(() => patientService.list({ status: "ACTIVE" }), []);
+  const { data: centers } = useAsync(() => centerService.list(), []);
 
   const patientName = (id: string) => patients?.find((p) => p.id === id)?.fullName ?? id;
 
@@ -67,6 +72,7 @@ export function AppointmentsPage() {
       endDateTime: toDateTimeLocal(appt.endDateTime),
       locationType: appt.locationType,
       notes: appt.notes ?? "",
+      centerId: appt.centerId ?? "",
     });
     setFormError(null);
     setModalOpen(true);
@@ -86,6 +92,7 @@ export function AppointmentsPage() {
       endDateTime: new Date(form.endDateTime).toISOString(),
       locationType: form.locationType,
       notes: form.notes.trim() || null,
+      centerId: form.centerId || null,
     };
     setSaving(true);
     setFormError(null);
@@ -110,6 +117,14 @@ export function AppointmentsPage() {
       reload();
     } catch (err) {
       globalThis.alert(err instanceof Error ? err.message : "Acción fallida");
+    }
+  }
+
+  async function exportIcs(id: string) {
+    try {
+      await calendarService.exportIcs(id);
+    } catch (err) {
+      globalThis.alert(err instanceof Error ? err.message : "No se pudo exportar el .ics");
     }
   }
 
@@ -191,6 +206,9 @@ export function AppointmentsPage() {
                         </button>
                       </>
                     )}
+                    <button className="btn btn--sm" onClick={() => exportIcs(appt.id)}>
+                      .ics
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -257,6 +275,20 @@ export function AppointmentsPage() {
                 {LOCATION_TYPES.map((l) => (
                   <option key={l} value={l}>
                     {humanizeEnum(l)}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="field">
+              Centro
+              <select
+                value={form.centerId}
+                onChange={(e) => setForm((f) => ({ ...f, centerId: e.target.value }))}
+              >
+                <option value="">Sin centro</option>
+                {centers?.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
                   </option>
                 ))}
               </select>

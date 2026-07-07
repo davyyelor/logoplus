@@ -15,6 +15,7 @@ public record AppointmentResponse(
         AppointmentStatus status,
         LocationType locationType,
         String notes,
+        String centerId,
         Instant createdAt,
         Instant updatedAt) {
 }

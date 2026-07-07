@@ -53,6 +53,10 @@ public class Patient extends BaseEntity {
     @Column(length = 4000)
     private String relevantNotes;
 
+    /** Optional center within the clinic this patient is primarily attended at. */
+    @Column(length = 36)
+    private String centerId;
+
     public String getClinicId() {
         return clinicId;
     }
@@ -139,6 +143,14 @@ public class Patient extends BaseEntity {
 
     public void setRelevantNotes(String relevantNotes) {
         this.relevantNotes = relevantNotes;
+    }
+
+    public String getCenterId() {
+        return centerId;
+    }
+
+    public void setCenterId(String centerId) {
+        this.centerId = centerId;
     }
 
     public String getFullName() {

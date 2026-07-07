@@ -169,6 +169,7 @@ export interface User {
   lastName: string;
   role: Role;
   active: boolean;
+  centerId: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -179,6 +180,7 @@ export interface CreateUserRequest {
   firstName: string;
   lastName: string;
   role: Role;
+  centerId?: string | null;
 }
 
 export interface UpdateUserRequest {
@@ -186,6 +188,7 @@ export interface UpdateUserRequest {
   lastName: string;
   role: Role;
   password?: string | null;
+  centerId?: string | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -206,6 +209,7 @@ export interface Patient {
   referralSource: string | null;
   reasonForConsultation: string | null;
   relevantNotes: string | null;
+  centerId: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -220,6 +224,7 @@ export interface PatientRequest {
   referralSource?: string | null;
   reasonForConsultation?: string | null;
   relevantNotes?: string | null;
+  centerId?: string | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -281,6 +286,7 @@ export interface Appointment {
   status: AppointmentStatus;
   locationType: LocationType;
   notes: string | null;
+  centerId: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -293,6 +299,7 @@ export interface AppointmentRequest {
   endDateTime: string;
   locationType: LocationType;
   notes?: string | null;
+  centerId?: string | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -314,6 +321,7 @@ export interface TherapySession {
   observations: string | null;
   homework: string | null;
   nextSteps: string | null;
+  centerId: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -331,6 +339,7 @@ export interface TherapySessionRequest {
   observations?: string | null;
   homework?: string | null;
   nextSteps?: string | null;
+  centerId?: string | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -515,4 +524,381 @@ export interface AppNotification {
   reference: string | null;
   read: boolean;
   createdAt: string;
+}
+
+// ===========================================================================
+// V2 — Phase 1 (homework, family evidence, evolution metrics, questionnaires)
+// ===========================================================================
+
+// --- Homework ---
+export type HomeworkStatus = "ASSIGNED" | "IN_PROGRESS" | "COMPLETED" | "REVIEWED" | "CANCELLED";
+export const HOMEWORK_STATUSES: HomeworkStatus[] = [
+  "ASSIGNED",
+  "IN_PROGRESS",
+  "COMPLETED",
+  "REVIEWED",
+  "CANCELLED",
+];
+// Statuses a family user is allowed to set.
+export const FAMILY_HOMEWORK_STATUSES: HomeworkStatus[] = ["IN_PROGRESS", "COMPLETED"];
+
+export interface Homework {
+  id: string;
+  clinicId: string;
+  patientId: string;
+  sessionId: string | null;
+  createdByUserId: string | null;
+  title: string;
+  description: string | null;
+  instructions: string | null;
+  dueDate: string | null;
+  status: HomeworkStatus;
+  visibleToFamily: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface HomeworkRequest {
+  sessionId?: string | null;
+  title: string;
+  description?: string | null;
+  instructions?: string | null;
+  dueDate?: string | null;
+  visibleToFamily?: boolean | null;
+}
+
+// --- Family evidence ---
+export type EvidenceType = "DOCUMENT" | "IMAGE" | "AUDIO" | "VIDEO" | "TEXT_NOTE";
+export const EVIDENCE_TYPES: EvidenceType[] = ["DOCUMENT", "IMAGE", "AUDIO", "VIDEO", "TEXT_NOTE"];
+
+export type EvidenceReviewStatus = "PENDING_REVIEW" | "REVIEWED" | "REJECTED";
+export const EVIDENCE_REVIEW_STATUSES: EvidenceReviewStatus[] = [
+  "PENDING_REVIEW",
+  "REVIEWED",
+  "REJECTED",
+];
+
+export interface FamilyEvidence {
+  id: string;
+  clinicId: string;
+  patientId: string;
+  homeworkId: string | null;
+  uploadedByUserId: string | null;
+  type: EvidenceType;
+  title: string | null;
+  description: string | null;
+  storageDocumentId: string | null;
+  textContent: string | null;
+  reviewStatus: EvidenceReviewStatus;
+  reviewedByUserId: string | null;
+  reviewedAt: string | null;
+  createdAt: string;
+}
+
+export interface FamilyEvidenceRequest {
+  homeworkId?: string | null;
+  type?: EvidenceType | null;
+  title?: string | null;
+  description?: string | null;
+  textContent?: string | null;
+}
+
+// --- Evolution metrics ---
+export interface PatientMetric {
+  id: string;
+  clinicId: string;
+  patientId: string;
+  name: string;
+  description: string | null;
+  unit: string | null;
+  active: boolean;
+  visibleToFamily: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PatientMetricRequest {
+  name: string;
+  description?: string | null;
+  unit?: string | null;
+  active?: boolean | null;
+  visibleToFamily?: boolean | null;
+}
+
+export interface PatientMetricEntry {
+  id: string;
+  clinicId: string;
+  patientId: string;
+  metricId: string;
+  sessionId: string | null;
+  value: number;
+  entryDate: string;
+  notes: string | null;
+  createdAt: string;
+}
+
+export interface PatientMetricEntryRequest {
+  metricId?: string | null;
+  sessionId?: string | null;
+  value: number;
+  entryDate: string;
+  notes?: string | null;
+}
+
+export interface MetricEvolution {
+  metric: PatientMetric;
+  entries: PatientMetricEntry[];
+}
+
+// --- Questionnaires ---
+export type QuestionnaireTargetRole = "STAFF" | "FAMILY" | "BOTH";
+export const QUESTIONNAIRE_TARGET_ROLES: QuestionnaireTargetRole[] = ["STAFF", "FAMILY", "BOTH"];
+
+export type QuestionType = "TEXT" | "NUMBER" | "SCALE_1_5" | "YES_NO" | "MULTIPLE_CHOICE";
+export const QUESTION_TYPES: QuestionType[] = [
+  "TEXT",
+  "NUMBER",
+  "SCALE_1_5",
+  "YES_NO",
+  "MULTIPLE_CHOICE",
+];
+
+export type AssignmentStatus = "PENDING" | "COMPLETED" | "REVIEWED" | "CANCELLED";
+export const ASSIGNMENT_STATUSES: AssignmentStatus[] = [
+  "PENDING",
+  "COMPLETED",
+  "REVIEWED",
+  "CANCELLED",
+];
+
+export interface QuestionnaireQuestion {
+  id: string;
+  text: string;
+  type: QuestionType;
+  optionsJson: string | null;
+  required: boolean;
+  position: number;
+}
+
+export interface QuestionnaireTemplate {
+  id: string;
+  clinicId: string;
+  name: string;
+  description: string | null;
+  targetRole: QuestionnaireTargetRole;
+  active: boolean;
+  questions: QuestionnaireQuestion[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface QuestionRequest {
+  text: string;
+  type?: QuestionType | null;
+  optionsJson?: string | null;
+  required?: boolean | null;
+  position?: number | null;
+}
+
+export interface QuestionnaireTemplateRequest {
+  name: string;
+  description?: string | null;
+  targetRole?: QuestionnaireTargetRole | null;
+  active?: boolean | null;
+  questions?: QuestionRequest[];
+}
+
+export interface QuestionnaireAssignment {
+  id: string;
+  clinicId: string;
+  patientId: string;
+  templateId: string;
+  templateName: string | null;
+  assignedByUserId: string | null;
+  assignedToUserId: string | null;
+  dueDate: string | null;
+  status: AssignmentStatus;
+  createdAt: string;
+}
+
+export interface AssignQuestionnaireRequest {
+  templateId: string;
+  assignedToUserId?: string | null;
+  dueDate?: string | null;
+}
+
+export interface AnswerRequest {
+  questionId: string;
+  answerText?: string | null;
+  answerNumber?: number | null;
+  answerJson?: string | null;
+}
+
+export interface SubmitResponseRequest {
+  answers: AnswerRequest[];
+}
+
+export interface QuestionnaireAnswer {
+  id: string;
+  questionId: string;
+  answerText: string | null;
+  answerNumber: number | null;
+  answerJson: string | null;
+}
+
+export interface QuestionnaireResponseDetail {
+  id: string;
+  assignmentId: string;
+  respondedByUserId: string | null;
+  submittedAt: string;
+  answers: QuestionnaireAnswer[];
+}
+
+// ---------------------------------------------------------------------------
+// V2 — Phase 2 (internal reminders, clinical history export)
+// ---------------------------------------------------------------------------
+
+export type ReminderStatus = "SCHEDULED" | "SENT" | "CANCELLED" | "FAILED";
+export const REMINDER_STATUSES: ReminderStatus[] = ["SCHEDULED", "SENT", "CANCELLED", "FAILED"];
+
+export interface Reminder {
+  id: string;
+  clinicId: string;
+  patientId: string | null;
+  targetUserId: string | null;
+  createdByUserId: string | null;
+  title: string;
+  message: string | null;
+  remindAt: string;
+  status: ReminderStatus;
+  relatedEntityType: string | null;
+  relatedEntityId: string | null;
+  sentAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ReminderRequest {
+  patientId?: string | null;
+  targetUserId?: string | null;
+  title: string;
+  message?: string | null;
+  remindAt: string;
+  relatedEntityType?: string | null;
+  relatedEntityId?: string | null;
+}
+
+export type ClinicalHistoryExportFormat = "ZIP" | "PDF" | "CSV";
+export const CLINICAL_HISTORY_EXPORT_FORMATS: ClinicalHistoryExportFormat[] = ["ZIP", "PDF", "CSV"];
+
+// ---------------------------------------------------------------------------
+// V2 — Phase 3 (multi-center)
+// ---------------------------------------------------------------------------
+
+export interface Center {
+  id: string;
+  clinicId: string;
+  name: string;
+  address: string | null;
+  city: string | null;
+  phone: string | null;
+  email: string | null;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CenterRequest {
+  name: string;
+  address?: string | null;
+  city?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  active?: boolean | null;
+}
+
+// ---------------------------------------------------------------------------
+// V2 — Phase 4 (Stripe payments, calendar integration)
+// ---------------------------------------------------------------------------
+
+export type StripeMode = "DISABLED" | "MOCK";
+
+export interface StripeStatus {
+  mode: StripeMode;
+  enabled: boolean;
+  platformFeePercent: number;
+}
+
+export interface CheckoutRequest {
+  patientId?: string | null;
+  description?: string | null;
+  amountCents: number;
+  currency?: string | null;
+  successUrl?: string | null;
+  cancelUrl?: string | null;
+}
+
+export interface CheckoutSessionResult {
+  mode: StripeMode;
+  enabled: boolean;
+  sessionId: string | null;
+  checkoutUrl: string | null;
+}
+
+export interface ConnectAccountResult {
+  mode: StripeMode;
+  enabled: boolean;
+  accountId: string | null;
+  onboardingUrl: string | null;
+}
+
+export type CalendarProviderType = "DISABLED" | "GOOGLE" | "OUTLOOK";
+
+export interface CalendarStatus {
+  provider: CalendarProviderType;
+  enabled: boolean;
+}
+
+export interface CalendarSyncResult {
+  provider: CalendarProviderType;
+  synced: boolean;
+  externalEventId: string | null;
+  message: string | null;
+}
+
+// ---------------------------------------------------------------------------
+// V2 — Phase 5 (electronic signatures)
+// ---------------------------------------------------------------------------
+
+export type SignatureProviderType = "INTERNAL_BASIC" | "ADVANCED_DISABLED";
+
+export type SignatureStatus = "SIGNED" | "FAILED";
+
+export interface SignatureStatusResponse {
+  provider: SignatureProviderType;
+  enabled: boolean;
+}
+
+export interface SignatureRequest {
+  documentType: string;
+  documentId?: string | null;
+  signerName: string;
+  note?: string | null;
+}
+
+export interface SignatureRecord {
+  id: string;
+  clinicId: string;
+  patientId: string;
+  documentType: string;
+  documentId: string | null;
+  signerUserId: string | null;
+  signerName: string;
+  provider: SignatureProviderType;
+  status: SignatureStatus;
+  signatureHash: string | null;
+  note: string | null;
+  signedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
 }

@@ -6,6 +6,7 @@ import { StateView } from "../components/StateView";
 import { StatusBadge } from "../components/StatusBadge";
 import { useAsync } from "../hooks/useAsync";
 import { patientService, type PatientFilters } from "../services/patientService";
+import { centerService } from "../services/centerService";
 import {
   GENDERS,
   PATIENT_STATUSES,
@@ -26,6 +27,7 @@ interface FormState {
   referralSource: string;
   reasonForConsultation: string;
   relevantNotes: string;
+  centerId: string;
 }
 
 const EMPTY_FORM: FormState = {
@@ -38,6 +40,7 @@ const EMPTY_FORM: FormState = {
   referralSource: "",
   reasonForConsultation: "",
   relevantNotes: "",
+  centerId: "",
 };
 
 export function PatientsPage() {
@@ -49,6 +52,7 @@ export function PatientsPage() {
   const [saving, setSaving] = useState(false);
 
   const { data, loading, error, reload } = useAsync(() => patientService.list(filters), [filters]);
+  const { data: centers } = useAsync(() => centerService.list(), []);
 
   function openCreate() {
     setEditing(null);
@@ -69,6 +73,7 @@ export function PatientsPage() {
       referralSource: patient.referralSource ?? "",
       reasonForConsultation: patient.reasonForConsultation ?? "",
       relevantNotes: patient.relevantNotes ?? "",
+      centerId: patient.centerId ?? "",
     });
     setFormError(null);
     setModalOpen(true);
@@ -90,6 +95,7 @@ export function PatientsPage() {
       referralSource: form.referralSource.trim() || null,
       reasonForConsultation: form.reasonForConsultation.trim() || null,
       relevantNotes: form.relevantNotes.trim() || null,
+      centerId: form.centerId || null,
     };
     setSaving(true);
     setFormError(null);
@@ -273,6 +279,20 @@ export function PatientsPage() {
                 value={form.referralSource}
                 onChange={(e) => setForm((f) => ({ ...f, referralSource: e.target.value }))}
               />
+            </label>
+            <label className="field">
+              Centro
+              <select
+                value={form.centerId}
+                onChange={(e) => setForm((f) => ({ ...f, centerId: e.target.value }))}
+              >
+                <option value="">Sin centro</option>
+                {centers?.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
             </label>
             <label className="field field--full">
               Motivo de consulta

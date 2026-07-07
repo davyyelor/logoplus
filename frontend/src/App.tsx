@@ -9,9 +9,16 @@ import { AppointmentsPage } from "./pages/AppointmentsPage";
 import { SessionsPage } from "./pages/SessionsPage";
 import { ReportTemplatesPage } from "./pages/ReportTemplatesPage";
 import { ConsentTemplatesPage } from "./pages/ConsentTemplatesPage";
+import { QuestionnaireTemplatesPage } from "./pages/QuestionnaireTemplatesPage";
+import { RemindersPage } from "./pages/RemindersPage";
+import { CentersPage } from "./pages/CentersPage";
+import { IntegrationsPage } from "./pages/IntegrationsPage";
+import { StripeBillingPage } from "./pages/StripeBillingPage";
 import { UsersPage } from "./pages/UsersPage";
 import { ClinicSettingsPage } from "./pages/ClinicSettingsPage";
 import { FamilyPortalPage } from "./pages/FamilyPortalPage";
+import { SignaturesPage } from "./pages/SignaturesPage";
+import { LandingPage } from "./pages/landing/LandingPage";
 import { BillingDashboard } from "./pages/BillingDashboard";
 import { PaymentsPage } from "./pages/PaymentsPage";
 import { FeesPage } from "./pages/FeesPage";
@@ -25,6 +32,7 @@ const ADMIN: Role[] = ["CLINIC_ADMIN"];
 export function App() {
   return (
     <Routes>
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route
         path="/*"
@@ -32,7 +40,7 @@ export function App() {
           <Layout>
             <Routes>
               <Route
-                path="/"
+                path="/dashboard"
                 element={
                   <ProtectedRoute roles={STAFF}>
                     <Dashboard />
@@ -88,6 +96,14 @@ export function App() {
                 }
               />
               <Route
+                path="/questionnaires"
+                element={
+                  <ProtectedRoute roles={CLINICAL}>
+                    <QuestionnaireTemplatesPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/users"
                 element={
                   <ProtectedRoute roles={ADMIN}>
@@ -136,6 +152,38 @@ export function App() {
                 }
               />
               <Route
+                path="/reminders"
+                element={
+                  <ProtectedRoute roles={STAFF}>
+                    <RemindersPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/settings/centers"
+                element={
+                  <ProtectedRoute roles={ADMIN}>
+                    <CentersPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/settings/integrations"
+                element={
+                  <ProtectedRoute roles={ADMIN}>
+                    <IntegrationsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/billing/stripe"
+                element={
+                  <ProtectedRoute roles={STAFF}>
+                    <StripeBillingPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/portal"
                 element={
                   <ProtectedRoute roles={["FAMILY"]}>
@@ -143,7 +191,15 @@ export function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route
+                path="/portal/signatures"
+                element={
+                  <ProtectedRoute roles={["FAMILY"]}>
+                    <SignaturesPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Routes>
           </Layout>
         }

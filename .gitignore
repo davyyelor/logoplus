@@ -12,12 +12,14 @@ out/
 *.tsbuildinfo
 .vite/
 
-# Environment variables
+# Environment variables (never commit real credentials; .env.example is the template)
 .env
 .env.local
+.env.prod
 .env.*.local
 .env.development
 .env.production
+!.env.example
 
 # Logs
 logs/
